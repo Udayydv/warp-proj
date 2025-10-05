@@ -1,0 +1,34 @@
+services:
+  # Backend API Service
+  - type: web
+    name: microcourses-backend
+    runtime: node
+    rootDir: microcourses-app/backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRE
+        value: 30d
+      - key: PORT
+        value: 5000
+      - key: MONGODB_URI
+        value: mongodb+srv://demo:demo123@cluster0.democloud.mongodb.net/microcourses?retryWrites=true&w=majority
+    
+  # Frontend Static Site  
+  - type: web
+    name: microcourses-frontend
+    runtime: static
+    rootDir: microcourses-app/frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://microcourses-backend.onrender.com/api
+
+databases:
+  # Using MongoDB Atlas instead of Render database
+  # Connection string provided in backend env vars
